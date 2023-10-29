@@ -5,3 +5,43 @@
   --text: hsla(0, 0%, 100%, 0.88);
 }
 
+.home-page {
+  width: 100%;
+}
+
+.log-in-btn-container {
+  text-align: right;
+}
+
+.log-in-btn {
+  background-color: #f8f9fa;
+  border: 1px solid #e9e8e8;
+  border-radius: 4px;
+  color: #3c4043;
+  cursor: pointer;
+  font-family: arial,sans-serif;
+  font-size: 1rem;
+  height: auto;
+  line-height: 27px;
+  padding: 1rem;
+  text-align: center;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: pre;
+}
+
+.log-in-btn:hover {
+  border-color: #dadce0;
+  box-shadow: rgba(0, 0, 0, .1) 0 1px 1px;
+  color: #202124;
+}
+
+.log-in-btn:focus {
+  border-color: #4285f4;
+  outline: none;
+}
+
+.icon{
+  width: 2rem;
+}
