@@ -4,6 +4,8 @@
   --link: #61dafb;
   --text: hsla(0, 0%, 100%, 0.88);
   font-family: 'Sometype Mono', monospace;
+  background-color: rgba(205,255,123,255)
+  ;
 }
 
 .home-page {
@@ -72,16 +74,33 @@
 
 .about {
   padding-left: 2rem;
-  width: 60%;
+  width: 80%;
   font-size: 1.2rem;
 }
 
 .socials {
-  margin-top: 10rem;
   text-align: right;
   margin-right: 1rem;
 }
 
 .icon{
   width: 2rem;
+}
+
+
+
+.logo{
+  width: 3rem;
+}
+
+.login-title{
+  margin-top: 6rem;
+  text-align: center;
+}
+
+.login-container{
+  border: 1px solid black;
+  width: 40%;
+  height: auto;
+  margin-left: 30%;
 }
