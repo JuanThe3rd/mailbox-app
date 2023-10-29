@@ -3,6 +3,7 @@
   --header: #fff;
   --link: #61dafb;
   --text: hsla(0, 0%, 100%, 0.88);
+  font-family: 'Sometype Mono', monospace;
 }
 
 .home-page {
@@ -19,7 +20,7 @@
   border-radius: 4px;
   color: #3c4043;
   cursor: pointer;
-  font-family: arial,sans-serif;
+  font-family: 'Sometype Mono', monospace;
   font-size: 1rem;
   height: auto;
   line-height: 27px;
@@ -40,6 +41,45 @@
 .log-in-btn:focus {
   border-color: #4285f4;
   outline: none;
+}
+
+.logo-container {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  margin-top: 2rem;
+}
+
+.home-title-container {
+  margin-top: 8rem;
+  margin-left: 15rem;
+  font-size: 2rem;
+  width: auto;
+  height: 9rem;
+  width: 20rem;
+}
+
+.home-logo {
+  width: 60%;
+  margin-left: 20%;
+  height: auto;
+}
+
+.home-info {
+  display: grid;
+  grid-template-columns: 75% 25%;
+  margin-top: 5rem;
+}
+
+.about {
+  padding-left: 2rem;
+  width: 60%;
+  font-size: 1.2rem;
+}
+
+.socials {
+  margin-top: 10rem;
+  text-align: right;
+  margin-right: 1rem;
 }
 
 .icon{
