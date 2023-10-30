@@ -61,7 +61,7 @@
 }
 
 .home-logo {
-  width: 60%;
+  width: 50%;
   margin-left: 20%;
   height: auto;
 }
@@ -91,6 +91,7 @@
 
 .logo{
   width: 3rem;
+  cursor: pointer;
 }
 
 .login-title{
@@ -99,8 +100,15 @@
 }
 
 .login-container{
-  border: 1px solid black;
-  width: 40%;
+  border: 2px solid #7c7c7c;
+  width: 30%;
   height: auto;
-  margin-left: 30%;
+  margin-left: 35%;
+  text-align: center;
+  padding: 1rem;
+}
+
+.register-login-div{
+  text-align: center;
+  padding: 1rem;
 }

@@ -14,7 +14,7 @@ function Home() {
                 <img className='home-logo' src={require('../site-images/logo.png')} alt='Logo' onClick={home} />
                 
                 <div className='home-title-container' >
-                    <h2>Welcome!</h2>
+                    <h2>welcome!</h2>
                 </div>
             </div>
 
