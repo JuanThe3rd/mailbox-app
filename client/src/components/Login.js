@@ -9,9 +9,7 @@ function Login() {
     const [errorMsg, setErrorMsg] = useState();
 
     useEffect(() => {
-        fetch('/accounts')
-            .then(res => res.json())
-            .then(setAccounts)
+        fetchAccounts();
     }, [])
 
     return(
@@ -41,7 +39,7 @@ function Login() {
 
                     <div className='register-login-div' >
                         <label>Need an account?</label>
-                        <button onClick={changeAction} >Register</button>
+                        <button onClick={changeAction} >Sign-Up</button>
                     </div>
                 </div>
             }
@@ -138,14 +136,13 @@ function Login() {
                     })
                 })
                 
-                setErrorMsg('Account Created! Logging in...');
+                setForm('login');
+                setErrorMsg('Account Created!');
+                fetchAccounts();
 
                 setTimeout(() => {
-                    history.push({
-                        pathname: '/messages',
-                        state: formData.username
-                    });
-                }, 2000);
+                    setErrorMsg(null);
+                }, 2000)
             }
         }
     }
@@ -159,6 +156,12 @@ function Login() {
 
         setErrorMsg();
         setFormData({});
+    }
+
+    function fetchAccounts(){
+        fetch('/accounts')
+            .then(res => res.json())
+            .then(setAccounts)
     }
 }
 

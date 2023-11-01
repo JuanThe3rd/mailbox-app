@@ -101,6 +101,7 @@
 
 .login-container{
   border: 2px solid #7c7c7c;
+  border-radius: 20px;
   width: 30%;
   height: auto;
   margin-left: 35%;
