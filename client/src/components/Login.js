@@ -102,8 +102,13 @@ function Login() {
         let account = null;
 
         for (let i = 0; i < accounts.length; i++){
-            if (accounts[i].username === formData.username && accounts[i].password === formData.password){
-                account = accounts[i]
+            if (accounts[i].username === formData.username){
+                if (form === 'register'){
+                    account = accounts[i];
+                }
+                else if (form === 'login' && accounts[i].password === formData.password){
+                    account = accounts[i];
+                }
             }
         }
 
@@ -122,7 +127,6 @@ function Login() {
             } else if (formData.password !== formData.confirm_password) {
                 setErrorMsg('Passwords do not match.')
             } else {
-                /*
                 fetch('/accounts', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
@@ -133,8 +137,15 @@ function Login() {
                         lastname: formData.lastname
                     })
                 })
-                */
-                setErrorMsg('Account Created!');
+                
+                setErrorMsg('Account Created! Logging in...');
+
+                setTimeout(() => {
+                    history.push({
+                        pathname: '/messages',
+                        state: formData.username
+                    });
+                }, 2000);
             }
         }
     }
