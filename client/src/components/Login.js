@@ -9,7 +9,11 @@ function Login() {
     const [errorMsg, setErrorMsg] = useState();
 
     useEffect(() => {
-        fetchAccounts();
+        fetch('/accounts')
+            .then(res => res.json())
+            .then(res => {
+                setAccounts(() => res);
+            })
     }, [])
 
     return(
@@ -114,7 +118,7 @@ function Login() {
             if (account !== null){
                 history.push({
                     pathname: '/messages',
-                    state: account
+                    state: [account]
                 })
             } else {
                 setErrorMsg('Either Username or Password is incorrect.')
@@ -135,10 +139,14 @@ function Login() {
                         lastname: formData.lastname
                     })
                 })
+                    .then(res => res.json())
+                    .then(new_account => {
+                        setAccounts([...accounts, new_account])
+                    })
                 
                 setForm('login');
                 setErrorMsg('Account Created!');
-                fetchAccounts();
+                setFormData({});
 
                 setTimeout(() => {
                     setErrorMsg(null);
@@ -152,16 +160,10 @@ function Login() {
             setForm('login');
         } else if (form === 'login') {
             setForm('register')
+            setFormData({});
         }
 
         setErrorMsg();
-        setFormData({});
-    }
-
-    function fetchAccounts(){
-        fetch('/accounts')
-            .then(res => res.json())
-            .then(setAccounts)
     }
 }
 

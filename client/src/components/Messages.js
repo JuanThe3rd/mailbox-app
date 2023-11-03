@@ -3,21 +3,7 @@ import { useLocation } from 'react-router-dom';
 
 function Messages() {
     const location = useLocation();
-    const username = location.state;
-    const [accounts, setAccounts] = useState();
-    let account = null;
-
-    useEffect(() => {
-        fetch('/accounts')
-            .then(res => res.json())
-            .then(setAccounts)
-
-        for (let i = 0; i < accounts.length; i++){
-            if (accounts[i].username === username){
-                account = account[i]
-            }
-        }
-    }, [])
+    const account = location.state[0];
 
     return (
         <div>
