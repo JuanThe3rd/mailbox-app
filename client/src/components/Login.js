@@ -17,7 +17,7 @@ function Login() {
     }, [])
 
     return(
-        <div>
+        <div className='login-page'>
             <img className='logo' src={require('../site-images/favicon.png')} alt='Logo' onClick={home} />
 
             {form === 'login' &&
@@ -26,15 +26,15 @@ function Login() {
 
                     <div className='login-container'>
                         <form onSubmit={handleSubmit}>
-                            <label>Username:</label>
+                            <label className='login-label'>Username:</label>
                             <br />
-                            <input placeholder='Username' name='username' onChange={handleChange} value={formData['username']} />
+                            <input className='login-input' placeholder='Username' name='username' onChange={handleChange} value={formData['username']} />
                             <br />
-                            <label>Password:</label>
+                            <label className='login-label'>Password:</label>
                             <br />
-                            <input placeholder='Password' type='password' name='password' onChange={handleChange} value={formData['password']} />
+                            <input className='login-input' placeholder='Password' type='password' name='password' onChange={handleChange} value={formData['password']} />
                             <br />
-                            <input type='Submit' value='Log-In' />
+                            <input className='login-submit-btn' type='Submit' value='Log-In' />
                         </form>
                         {errorMsg &&
                             <p>{errorMsg}</p>
@@ -43,7 +43,7 @@ function Login() {
 
                     <div className='register-login-div' >
                         <label>Need an account?</label>
-                        <button onClick={changeAction} >Sign-Up</button>
+                        <button className='change-form-btn' onClick={changeAction} >Sign-Up</button>
                     </div>
                 </div>
             }
@@ -53,27 +53,27 @@ function Login() {
 
                     <div className='login-container'>
                         <form onSubmit={handleSubmit}>
-                            <label>First Name:</label>
+                            <label className='login-label'>First Name:</label>
                             <br />
-                            <input placeholder='First name' name='firstname' onChange={handleChange} value={formData.firstname} />
+                            <input className='login-input' placeholder='First name' name='firstname' onChange={handleChange} value={formData.firstname} />
                             <br />
-                            <label>Last Name:</label>
+                            <label className='login-label'>Last Name:</label>
                             <br />
-                            <input placeholder='Last name' name='lastname' onChange={handleChange} value={formData.lastname} />
+                            <input className='login-input' placeholder='Last name' name='lastname' onChange={handleChange} value={formData.lastname} />
                             <br />
-                            <label>Username:</label>
+                            <label className='login-label'>Username:</label>
                             <br />
-                            <input placeholder='Username' name='username' onChange={handleChange} value={formData.username} />
+                            <input className='login-input' placeholder='Username' name='username' onChange={handleChange} value={formData.username} />
                             <br />
-                            <label>Password:</label>
+                            <label className='login-label'>Password:</label>
                             <br />
-                            <input placeholder='Password' type='password' name='password' onChange={handleChange} value={formData.password} />
+                            <input className='login-input' placeholder='Password' type='password' name='password' onChange={handleChange} value={formData.password} />
                             <br />
-                            <label>Confirm Password:</label>
+                            <label className='login-label'>Confirm Password:</label>
                             <br />
-                            <input placeholder='Confirm Password' type='password' name='confirm_password' onChange={handleChange} value={formData.confirm_password} />
+                            <input className='login-input' placeholder='Confirm Password' type='password' name='confirm_password' onChange={handleChange} value={formData.confirm_password} />
                             <br />
-                            <input type='submit' value='Sign-Up' />
+                            <input className='login-submit-btn' type='submit' value='Sign-Up' />
                         </form>
                         {errorMsg &&
                             <p>{errorMsg}</p>
@@ -82,7 +82,7 @@ function Login() {
 
                     <div className='register-login-div' >
                         <label>Already have an account?</label>
-                        <button onClick={changeAction} >Log-In</button>
+                        <button className='change-form-btn' onClick={changeAction} >Log-In</button>
                     </div>
                 </div>
             }

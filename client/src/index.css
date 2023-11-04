@@ -4,12 +4,14 @@
   --link: #61dafb;
   --text: hsla(0, 0%, 100%, 0.88);
   font-family: 'Sometype Mono', monospace;
-  background-color: rgba(205,255,123,255)
   ;
 }
 
 .home-page {
-  width: 100%;
+  width: 101.15%;
+  background-color: rgba(205,255,123,255);
+  margin-left: -0.5rem;
+  margin-top: -0.5rem;
 }
 
 .log-in-btn-container {
@@ -17,32 +19,49 @@
 }
 
 .log-in-btn {
-  background-color: #f8f9fa;
-  border: 1px solid #e9e8e8;
-  border-radius: 4px;
-  color: #3c4043;
+  align-items: center;
+  background-color: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 15px;
+  box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
+  box-sizing: border-box;
+  color: rgba(0, 0, 0, 0.85);
   cursor: pointer;
-  font-family: 'Sometype Mono', monospace;
-  font-size: 1rem;
-  height: auto;
-  line-height: 27px;
-  padding: 1rem;
-  text-align: center;
+  display: inline-flex;
+  font-family: system-ui,-apple-system,system-ui,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  justify-content: center;
+  line-height: 1.25;
+  margin: 1rem;
+  min-height: 3rem;
+  padding: calc(.875rem - 1px) calc(1.5rem - 1px);
+  position: relative;
+  text-decoration: none;
+  transition: all 250ms;
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
-  white-space: pre;
+  vertical-align: baseline;
+}
+
+.log-in-btn:hover,
+.log-in-btn:focus {
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+  color: rgba(0, 0, 0, 0.65);
 }
 
 .log-in-btn:hover {
-  border-color: #dadce0;
-  box-shadow: rgba(0, 0, 0, .1) 0 1px 1px;
-  color: #202124;
+  transform: translateY(-1px);
 }
 
-.log-in-btn:focus {
-  border-color: #4285f4;
-  outline: none;
+.log-in-btn:active {
+  background-color: #F0F0F1;
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: rgba(0, 0, 0, 0.06) 0 2px 4px;
+  color: rgba(0, 0, 0, 0.65);
+  transform: translateY(0);
 }
 
 .logo-container {
@@ -89,13 +108,21 @@
 
 
 
+.login-page{
+  background-color: rgba(205,255,123,255);
+  margin-left: -0.5rem;
+  margin-right: -0.5rem;
+  margin-top: -0.5rem;
+  height: 50.9rem;
+}
+
 .logo{
-  width: 3rem;
+  width: 4rem;
   cursor: pointer;
 }
 
 .login-title{
-  margin-top: 6rem;
+  margin-top: 4rem;
   text-align: center;
 }
 
@@ -105,11 +132,196 @@
   width: 30%;
   height: auto;
   margin-left: 35%;
-  text-align: center;
   padding: 1rem;
+}
+
+.login-label{
+  height: 1.5rem;
+}
+
+.login-input{
+  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+  width: 100%;
+  height: 1.5rem;
+}
+
+.login-submit-btn {
+  align-items: center;
+  background-color: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 15px;
+  box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
+  box-sizing: border-box;
+  color: rgba(0, 0, 0, 0.85);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: system-ui,-apple-system,system-ui,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  justify-content: center;
+  line-height: 1.25;
+  margin-left: 30%;
+  min-height: 3rem;
+  padding: calc(.875rem - 1px) calc(1.5rem - 1px);
+  position: relative;
+  text-decoration: none;
+  transition: all 250ms;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+  width: 40%;
+}
+
+.login-submit-btn:hover,
+.login-submit-btn:focus {
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.login-submit-btn:hover {
+  transform: translateY(-1px);
+}
+
+.login-submit-btn:active {
+  background-color: #F0F0F1;
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: rgba(0, 0, 0, 0.06) 0 2px 4px;
+  color: rgba(0, 0, 0, 0.65);
+  transform: translateY(0);
+}
+
+.change-form-btn {
+  align-items: center;
+  background-color: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 15px;
+  box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
+  box-sizing: border-box;
+  color: rgba(0, 0, 0, 0.85);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: system-ui,-apple-system,system-ui,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  height: 1rem;
+  justify-content: center;
+  line-height: 1rem;
+  margin-left: 1rem;
+  padding: calc(.875rem - 1px) calc(1.5rem - 1px);
+  position: relative;
+  text-decoration: none;
+  transition: all 250ms;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+}
+
+.change-form-btn:hover,
+.change-form-btn:focus {
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.change-form-btn:hover {
+  transform: translateY(-1px);
+}
+
+.change-form-btn:active {
+  background-color: #F0F0F1;
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: rgba(0, 0, 0, 0.06) 0 2px 4px;
+  color: rgba(0, 0, 0, 0.65);
+  transform: translateY(0);
 }
 
 .register-login-div{
   text-align: center;
   padding: 1rem;
+}
+
+
+
+.navbar-container {
+  margin-top: -0.5rem;
+  margin-left: -0.5rem;
+  width: 100%;
+  padding: 0.5rem;
+  height: 3rem;
+  border-bottom: 2px solid black;
+  background-color: rgba(205,255,123,255);
+}
+
+.nav-logo{
+  height: 3rem;
+  cursor: pointer;
+}
+
+.nav-btns-container{
+  text-align: right;
+  margin-top: -3.25rem;
+  height: 3rem;
+}
+
+.nav-btn{
+  height: 3rem;
+  margin-left: 1rem;
+}
+
+.nav-btn {
+  align-items: center;
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 15px;
+  box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
+  box-sizing: border-box;
+  color: rgba(0, 0, 0, 0.85);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: system-ui,-apple-system,system-ui,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  height: 3rem;
+  justify-content: center;
+  line-height: 1rem;
+  margin-left: 1rem;
+  padding: calc(.875rem - 1px) calc(1.5rem - 1px);
+  position: relative;
+  text-decoration: none;
+  transition: all 250ms;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+}
+
+.nav-btn:hover,
+.nav-btn:focus {
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.nav-btn:hover {
+  transform: translateY(-1px);
+}
+
+.nav-btn:active {
+  background-color: #F0F0F1;
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: rgba(0, 0, 0, 0.06) 0 2px 4px;
+  color: rgba(0, 0, 0, 0.65);
+  transform: translateY(0);
+}
+
+.contacts-container {
+  border: 1px solid black;
+  margin-left: -0.5rem;
+  margin-right: -0.5rem;
+  height: 46.7rem;
+  width: 27%;
 }
