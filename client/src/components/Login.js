@@ -49,7 +49,7 @@ function Login() {
             }
             {form === 'register' &&
                 <div>
-                    <h1 className='login-title' >sign-up</h1>
+                    <h1 className='register-title' >sign-up</h1>
 
                     <div className='login-container'>
                         <form onSubmit={handleSubmit}>

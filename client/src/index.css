@@ -4,6 +4,7 @@
   --link: #61dafb;
   --text: hsla(0, 0%, 100%, 0.88);
   font-family: 'Sometype Mono', monospace;
+  overflow: hidden;
   ;
 }
 
@@ -122,8 +123,10 @@
 }
 
 .logo{
-  width: 4rem;
   cursor: pointer;
+  margin-left: 0.5rem;
+  margin-top: 0.5rem;
+  width: 4rem;
 }
 
 .login-title{
@@ -132,7 +135,14 @@
   font-size: 2.5rem;
 }
 
+.register-title{
+  margin-top: 5rem;
+  text-align: center;
+  font-size: 2.5rem;
+}
+
 .login-container{
+  background-color: white;
   border: 2px solid #000000;
   border-radius: 20px;
   width: 30%;
@@ -159,7 +169,7 @@
 
 .login-input{
   all: unset;
-  background-color: rgba(205, 255, 123, 255);
+  background-color: white;
   border: 1px solid #000000;
   border-radius: 10px;
   color: #000000;
@@ -176,7 +186,7 @@
 }
 
 .login-input:is(:focus, :valid) ~ label {
-  background-color: rgba(205,255,123,255);
+  background-color: white;
   color: var(--primary);
   padding-inline: 0.3rem;
   transform:
@@ -373,14 +383,17 @@
 .contacts-title {
   background-color: rgb(182, 182, 182);
   border-bottom: 1px solid black;
+  height: 4rem;
   padding: 0.5rem;
   text-align: center;
 }
 
 .contact-container {
   border-bottom: 1px solid black;
-  padding: 0.5rem;
   cursor: pointer;
+  height: 2rem;
+  padding: 0.5rem;
+  padding-bottom: 1.5rem;
 }
 
 .contact-container:hover {

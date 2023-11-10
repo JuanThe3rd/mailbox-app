@@ -21,7 +21,7 @@ function Home() {
             <div className='home-info'>
                 <div className='about' >
                     <h3>about</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nec felis nisi. Pellentesque et urna sed tellus vulputate maximus id semper diam. Curabitur placerat lectus id nunc mattis vulputate. Vivamus ut aliquam risus. Maecenas nec libero viverra, feugiat dui pellentesque, molestie quam. Sed placerat mattis mattis. Nulla facilisi. Nulla bibendum metus ac eros sagittis, et maximus lectus facilisis. Phasellus a velit eu mi consectetur bibendum. Donec varius molestie nisl, eu suscipit lorem volutpat sit amet. Vivamus pretium diam at velit tincidunt, nec rutrum neque fringilla. In aliquet egestas arcu. Nunc urna tellus, vehicula posuere sapien vel, vestibulum tempus purus. Praesent vestibulum pharetra suscipit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nec felis nisi. Pellentesque et urna sed tellus vulputate maximus id semper diam. Curabitur placerat lectus id nunc mattis vulputate. Vivamus ut aliquam risus. Maecenas nec libero viverra, feugiat dui pellentesque, molestie quam. Sed placerat mattis mattis. Nulla facilisi. Nulla bibendum metus ac eros sagittis, et maximus lectus facilisis. Phasellus a velit eu mi consectetur bibendum. Donec varius molestie nisl, eu suscipit lorem volutpat sit amet.</p>
                 </div>
 
                 <div className='socials' >
