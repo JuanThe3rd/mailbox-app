@@ -6,6 +6,7 @@ function Messages() {
     const location = useLocation();
     const account = location.state[0];
     const accounts = location.state[1];
+    let current_friend = location.state[2];
     const [friendsInfo, setFriendsInfo] = useState({'connections': [], 'friends': []});
 
     useEffect(() => {
@@ -39,6 +40,10 @@ function Messages() {
             });
     }, []);
 
+    if (current_friend === undefined){
+        current_friend = friendsInfo.friends[0];
+    }
+
     return (
         <div>
             <div className='navbar-container' >
@@ -55,14 +60,14 @@ function Messages() {
                         <h3>Contacts</h3>
                     </div>
                     {friendsInfo.friends.map((friend) => (
-                        <div className='contact-container' key={friend.id}>
+                        <div className='contact-container' key={friend.id} onClick={(e) => changeChat(friend)}>
                             <p>{friend.firstname}</p>
                         </div>
                     ))}
                 </div>
 
                 <div className='chat-container'>
-                    <h1>Title</h1>
+                    <h1>{current_friend.firstname}</h1>
                 </div>
             </div>
         </div>
@@ -72,6 +77,13 @@ function Messages() {
         history.push({
             pathname: e.target.name,
             state: [account, accounts]
+        })
+    }
+
+    function changeChat(friend){
+        history.push({
+            pathname: '/messages',
+            state: [account, accounts, friend]
         })
     }
 }
