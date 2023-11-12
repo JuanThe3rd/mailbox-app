@@ -8,7 +8,7 @@ from config import db
 class Account(db.Model, SerializerMixin):
     __tablename__ = 'accounts'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key = True)
     username = db.Column(db.String, nullable=False)
     password = db.Column(db.String, nullable=False)
     firstname = db.Column(db.String, nullable=False)
@@ -19,24 +19,25 @@ class Account(db.Model, SerializerMixin):
     phone_number = db.Column(db.String)
     about_me = db.Column(db.String)
 
-    friendships = db.relationship('Friendship', cascade='all, delete', backref='account')
+    messages = db.relationship('Message', cascade = 'all, delete', backref = 'account')
 
-    serialize_rules = ('-friendships.account',)
+    serialize_rules = ('-messages.account',)
 
     def __repr__(self):
-        return f'<Account Name: {self.firstname} {self.lastname} DOB: {self.dob}/>'
+        return f'<Account Name: {self.firstname} {self.lastname} />'
 
 
-class Friendship(db.Model, SerializerMixin):
-    __tablename__ = 'friendships'
+class Message(db.Model, SerializerMixin):
+    __tablename__ = 'messages'
 
-    id = db.Column(db.Integer, primary_key=True)
-    chat = db.Column(db.String)
-
+    id = db.Column(db.Integer, primary_key = True)
+    content = db.Column(db.String, nullable=False)
     sender_id = db.Column(db.Integer, db.ForeignKey('accounts.id'))
     receiver_id = db.Column(db.Integer)
+    timestamp = db.Column(db.String)
+    seen = db.Column(db.Boolean)
 
-    serialize_rules = ('-messages.friendship',)
+    serialize_rules = ('-account.messages',)
 
     def __repr__(self):
-        return f'<Friendship first_id: {self.sender_id}, second_id: {self.receiver_id} />'
+        return f'<Message Receiver ID: {self.receiver_id} Time: {self.timestamp} />'

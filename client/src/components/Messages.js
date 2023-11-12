@@ -72,7 +72,7 @@ function Messages() {
                         </div>
 
                         <div className='send-message-container'>
-                            <textarea className='message-to-send' type='text'></textarea>
+                            <textarea className='message-to-send' type='text' placeholder='Message' ></textarea>
                             <img className='send-message-btn' alt='Send' src={require('../site-images/send-message.png')} />
                         </div>
                     </div>
