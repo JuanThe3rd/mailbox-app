@@ -6,40 +6,53 @@ function Messages() {
     const location = useLocation();
     const account = location.state[0];
     const accounts = location.state[1];
-    const [friendsInfo, setFriendsInfo] = useState({'connections': [], 'friends': []});
-    const [currentChat, setCurrentChat] = useState({'friend': null, 'connection': null});
+    const [friendsInfo, setFriendsInfo] = useState({'messages': [], 'friends': []});
+    const [currentFriend, setCurrentFriend] = useState(null);
+    const [chat, setChat] = useState(null);
 
     useEffect(() => {
-        const temp_connections = [];
+        const temp_messages = [];
         const temp_friends = [];
 
-        fetch('/friendships')
+        fetch('/messages')
             .then(res => res.json())
-            .then(friendships => {
-                for (let i = 0; i < friendships.length; i++){
-                    if (friendships[i].sender_id === account.id){
-                        temp_connections.push(friendships[i]);
+            .then(messages => {
+                for (let i = 0; i < messages.length; i++){
+                    if (messages[i].sender_id === account.id){
+                        temp_messages.push(messages[i]);
 
                         for(let j = 0; j < accounts.length; j++){
-                            if (friendships[i].receiver_id === accounts[j].id){
+                            if (messages[i].receiver_id === accounts[j].id){
                                 temp_friends.push(accounts[j]);
                             };
                         };
-                    } else if (friendships[i].receiver_id === account.id){
-                        temp_connections.push(friendships[i]);
+                    } else if (messages[i].receiver_id === account.id){
+                        temp_messages.push(messages[i]);
 
                         for(let j = 0; j < accounts.length; j++){
-                            if (friendships[i].sender_id === accounts[j].id){
+                            if (messages[i].sender_id === accounts[j].id){
                                 temp_friends.push(accounts[j]);
                             };
                         };
                     };
                 };
 
-                setFriendsInfo({'connections': temp_connections, 'friends': temp_friends});
-                setCurrentChat({'friend': temp_friends[0], 'connection': temp_connections[0]});
+                setFriendsInfo({'messages': temp_messages, 'friends': temp_friends});
+                setCurrentFriend(temp_friends[0]);
             });
     }, []);
+
+    useEffect(() => {
+        const temp_chat = [];
+
+        for (let i = 0; i < friendsInfo.messages.length; i++){
+            if (friendsInfo.messages[i].sender_id === currentFriend.id || friendsInfo.messages[i].receiver_id === currentFriend.id){
+                temp_chat.push(friendsInfo.messages[i]);
+            }
+        }
+
+        setChat(temp_chat);
+    }, [currentFriend])
 
     return (
         <div>
@@ -57,15 +70,14 @@ function Messages() {
                         <h3>Contacts</h3>
                     </div>
                     {friendsInfo.friends.map((friend) => (
-                        <div className='contact-container' key={friend.id} onClick={(e) => changeChat(friend)}>
+                        <div className='contact-container' key={friend.id} onClick={() => setCurrentFriend(friend)}>
                             <p>{friend.firstname}</p>
                         </div>
                     ))}
                 </div>
-                
-                {currentChat.friend !== null &&
+                { currentFriend !== null &&
                     <div className='chat-section' >
-                        <h1 className='chat-contact-name'>{currentChat.friend.firstname} {`${currentChat.friend.lastname[0]}.`}</h1>
+                        <h1 className='chat-contact-name'>{currentFriend.firstname} {`${currentFriend.lastname[0]}.`}</h1>
 
                         <div className='messages-container'>
 
@@ -86,18 +98,6 @@ function Messages() {
             pathname: e.target.name,
             state: [account, accounts]
         })
-    }
-
-    function changeChat(friend){
-        let temp_connection = null;
-
-        for(let i = 0; i < friendsInfo.connections.length; i++){
-            if ((friendsInfo.connections[i].receiver_id === account.id && friendsInfo.connections[i].sender_id === friend.id) || (friendsInfo.connections[i].receiver_id === friend.id && friendsInfo.connections[i].sender_id === account.id)){
-                temp_connection = friendsInfo.connections[i];
-            }
-        }
-
-        setCurrentChat({'friend': friend, 'connection': temp_connection});
     }
 }
 
