@@ -9,6 +9,7 @@ function Messages() {
     const [friendsInfo, setFriendsInfo] = useState({'messages': [], 'friends': []});
     const [currentFriend, setCurrentFriend] = useState(null);
     const [chat, setChat] = useState(null);
+    const [newMessage, setNewMessage] = useState(null);
 
     useEffect(() => {
         const temp_messages = [];
@@ -23,7 +24,9 @@ function Messages() {
 
                         for(let j = 0; j < accounts.length; j++){
                             if (messages[i].receiver_id === accounts[j].id){
-                                temp_friends.push(accounts[j]);
+                                if (!temp_friends.includes(accounts[j])){
+                                    temp_friends.push(accounts[j]);
+                                }
                             };
                         };
                     } else if (messages[i].receiver_id === account.id){
@@ -54,6 +57,8 @@ function Messages() {
         setChat(temp_chat);
     }, [currentFriend])
 
+    console.log(newMessage);
+
     return (
         <div>
             <div className='navbar-container' >
@@ -80,12 +85,16 @@ function Messages() {
                         <h1 className='chat-contact-name'>{currentFriend.firstname} {`${currentFriend.lastname[0]}.`}</h1>
 
                         <div className='messages-container'>
-
+                            {chat.map((message) => (
+                                <div key={message.id} className='message'>
+                                    <p>{message.content}</p>
+                                </div>
+                            ))}
                         </div>
 
                         <div className='send-message-container'>
-                            <textarea className='message-to-send' type='text' placeholder='Message' ></textarea>
-                            <img className='send-message-btn' alt='Send' src={require('../site-images/send-message.png')} />
+                            <textarea className='message-to-send' type='text' placeholder='Message' onChange={handleChange} value={newMessage} ></textarea>
+                            <img className='send-message-btn' alt='Send' src={require('../site-images/send-message.png')} onClick={sendMessage} />
                         </div>
                     </div>
                 }
@@ -98,6 +107,38 @@ function Messages() {
             pathname: e.target.name,
             state: [account, accounts]
         })
+    }
+
+    function handleChange(e){
+        setNewMessage(e.target.value)
+    }
+
+    function sendMessage(e){
+        const datetime = new Date();
+        let timestamp = datetime.toString().slice(4, 24);
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const month_num = months.indexOf(timestamp.slice(0, 3)) + 1;
+
+        const convertedTimestamp = `${month_num}/${timestamp.slice(4, 6)}/${timestamp.slice(7, 11)} ${timestamp.slice(12, 17)}`;
+
+        if (newMessage !== ''){
+            fetch('/messages', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    content: newMessage,
+                    sender_id: account.id,
+                    receiver_id: currentFriend.id,
+                    timestamp: convertedTimestamp,
+                    seen: false
+                })
+            })
+                .then(res => res.json())
+                .then(new_message => {
+                    setChat([...chat, new_message]);
+                    setNewMessage('');
+                })
+        }
     }
 }
 
