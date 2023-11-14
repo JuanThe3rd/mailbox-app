@@ -34,7 +34,9 @@ function Messages() {
 
                         for(let j = 0; j < accounts.length; j++){
                             if (messages[i].sender_id === accounts[j].id){
-                                temp_friends.push(accounts[j]);
+                                if (!temp_friends.includes(accounts[j])){
+                                    temp_friends.push(accounts[j]);
+                                }
                             };
                         };
                     };
