@@ -60,6 +60,16 @@ function Messages() {
         setChat(temp_chat);
     }, [currentFriend])
 
+/*
+    <------ Make the messages scroll to bottom ------>
+
+    useEffect(() => {
+        const chat_div = document.getElementById('chat-div');
+
+        setTimeout(() => chat_div.scrollIntoView(false), 1000);
+    }, [chat])
+*/
+
     return (
         <div>
             <div className='navbar-container' >
@@ -77,7 +87,7 @@ function Messages() {
                     </div>
                     <div className='contacts' >
                         {friendsInfo.friends.map((friend) => (
-                            <div className='contact-container' key={friend.id} onClick={() => setCurrentFriend(friend)}>
+                            <div className='contact-container' id={friend.id} key={friend.id} onClick={() => setCurrentFriend(friend)}>
                                 <p>{friend.firstname}</p>
                             </div>
                         ))}
@@ -87,7 +97,7 @@ function Messages() {
                     <div className='chat-section' >
                         <h1 className='chat-contact-name'>{currentFriend.firstname} {`${currentFriend.lastname[0]}.`}</h1>
 
-                        <div className='messages-container'>
+                        <div className='messages-container' id='chat-div' >
                             {chat.map((message) => (
                                 <MessageBubble key={message.id} message={message} account={account} />
                             ))}

@@ -386,9 +386,6 @@
   border-right: 3px solid rgb(94, 94, 94);
   margin-left: -0.5rem;
   height: 46.25rem;
-}
-
-.contacts {
   overflow-y: scroll;
 }
 
