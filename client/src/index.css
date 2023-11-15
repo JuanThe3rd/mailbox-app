@@ -147,7 +147,7 @@
 
 .register-title{
   color: rgb(244, 144, 108);
-  margin-top: 4rem;
+  margin-top: 2rem;
   text-align: center;
   font-size: 2.5rem;
 }
@@ -156,16 +156,17 @@
   background-color: white;
   border: 2px solid #000000;
   border-radius: 20px;
-  width: 30%;
+  width: 40%;
   height: auto;
-  margin-left: 35%;
-  padding: 1rem;
+  margin-left: 30%;
+  padding: 2rem;
 }
 
 .login-input-group{
   font-size: 1rem;
   position: relative;
   --primary: #2196f3;
+  margin-left: 10%;
 }
 
 .login-label{
@@ -173,7 +174,7 @@
   left: 1rem;
   pointer-events: none;
   position: absolute;
-  top: 0.6rem;
+  top: 1rem;
   transition: 200ms
     cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -184,9 +185,12 @@
   border: 1px solid #000000;
   border-radius: 10px;
   color: #000000;
+  height: 2rem;
   margin-bottom: 2rem;
-  padding: 0.5rem;
-  width: 95%;
+  padding-left: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  width: 80%;
   transition: 200ms
     cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -201,7 +205,7 @@
   color: var(--primary);
   padding-inline: 0.3rem;
   transform:
-    translateY(-90%)
+    translateY(-130%)
     scale(0.9);
 }
 
@@ -382,7 +386,10 @@
   border-right: 3px solid rgb(94, 94, 94);
   margin-left: -0.5rem;
   height: 46.25rem;
-  overflow-y: auto;
+}
+
+.contacts {
+  overflow-y: scroll;
 }
 
 .contacts-title {
@@ -423,8 +430,9 @@
 }
 
 .messages-container {
-  height: 68.4%;
+  height: 32.6rem;
   margin-top: -1.68rem;
+  overflow-y: scroll;
 }
 
 .send-message-container {
@@ -432,8 +440,8 @@
   border-top: 3px solid rgb(94, 94, 94);
   display: grid;
   grid-template-columns: 85% 15%;
-  height: 17.75%;
-  margin-bottom: 2rem;
+  height: 18%;
+  margin-top: 0;
   position: relative;
 }
 
@@ -453,4 +461,83 @@
   margin-left: 30%;
   margin-top: 25%;
   width: 40%;
+}
+
+.sent-message-wrapper {
+  text-align: right;
+}
+
+.sent-message-bubble {
+  background-color: rgb(244, 144, 108);
+  border: 1px solid black;
+  border-radius: 15px;
+  color: white;
+  display: inline-block;
+  margin: 0.5rem 1.5rem 0.5rem auto;
+  max-width: 60%;
+  padding: 0.75rem;
+  position: relative;
+}
+
+.sent-message-bubble:before {
+  border-bottom: 10px solid transparent;
+  border-left: 10px solid black;
+  border-right: 10px solid transparent;
+  border-top: 10px solid black;
+  content: '';
+  height: 0px;
+  right: -19px;
+  position: absolute;
+  top: 6px;
+  width: 0px;
+}
+
+.sent-message-bubble:after {
+  border-left: 9px solid rgb(244, 144, 108);
+  border-right: 9px solid transparent;
+  border-top: 9px solid rgb(244, 144, 108);
+  border-bottom: 9px solid transparent;
+  content: "";
+  height: 0px;
+  position: absolute;
+  right: -15px;
+  top: 8px;
+  width: 0px;
+}
+
+.received-message-bubble {
+  background-color: rgb(200, 200, 200);
+  border: 1px solid black;
+  border-radius: 15px;
+  display: inline-block;
+  margin: 0.5rem auto 0.5rem 1.5rem;
+  max-width: 60%;
+  padding: 0.75rem;
+  position: relative;
+}
+
+.received-message-bubble:before {
+  border-bottom: 10px solid transparent;
+  border-left: 10px solid transparent;
+  border-right: 10px solid black;
+  border-top: 10px solid black;
+  content: '';
+  height: 0px;
+  left: -19px;
+  position: absolute;
+  top: 7px;
+  width: 0px;
+}
+
+.received-message-bubble:after {
+  border-left: 9px solid transparent;
+  border-right: 9px solid rgb(200, 200, 200);
+  border-top: 9px solid rgb(200,200,200);
+  border-bottom: 9px solid transparent;
+  content: '';
+  height: 0px;
+  position: absolute;
+  left: -15px;
+  top: 9px;
+  width: 0px;
 }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
+import MessageBubble from './MessageBubble.js';
 
 function Messages() {
     const history = useHistory();
@@ -59,8 +60,6 @@ function Messages() {
         setChat(temp_chat);
     }, [currentFriend])
 
-    console.log(newMessage);
-
     return (
         <div>
             <div className='navbar-container' >
@@ -76,11 +75,13 @@ function Messages() {
                     <div className='contacts-title'>
                         <h3>Contacts</h3>
                     </div>
-                    {friendsInfo.friends.map((friend) => (
-                        <div className='contact-container' key={friend.id} onClick={() => setCurrentFriend(friend)}>
-                            <p>{friend.firstname}</p>
-                        </div>
-                    ))}
+                    <div className='contacts' >
+                        {friendsInfo.friends.map((friend) => (
+                            <div className='contact-container' key={friend.id} onClick={() => setCurrentFriend(friend)}>
+                                <p>{friend.firstname}</p>
+                            </div>
+                        ))}
+                    </div>
                 </div>
                 { currentFriend !== null &&
                     <div className='chat-section' >
@@ -88,9 +89,7 @@ function Messages() {
 
                         <div className='messages-container'>
                             {chat.map((message) => (
-                                <div key={message.id} className='message'>
-                                    <p>{message.content}</p>
-                                </div>
+                                <MessageBubble key={message.id} message={message} account={account} />
                             ))}
                         </div>
 

@@ -22,7 +22,7 @@ function Login() {
 
             {form === 'login' &&
                 <div>
-                    <h1 className='login-title' >log-in</h1>
+                    <h1 className='login-title' >Log-In</h1>
 
                     <div className='login-container'>
                         <form onSubmit={handleSubmit}>
@@ -49,7 +49,7 @@ function Login() {
             }
             {form === 'register' &&
                 <div>
-                    <h1 className='register-title' >sign-up</h1>
+                    <h1 className='register-title' >Sign-Up</h1>
 
                     <div className='login-container'>
                         <form onSubmit={handleSubmit}>
