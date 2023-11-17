@@ -8,6 +8,7 @@ function Contacts() {
     const [friendsInfo, setFriendsInfo] = useState({'messages': [], 'friends': []});
     const [currentFriend, setCurrentFriend] = useState(null);
     const [modals, setModals] = useState({'editProfile': 'inactive', 'addFriend': 'inactive'})
+    const [inputData, setInputData] = useState({});
 
     useEffect(() => {
         fetchData();
@@ -32,32 +33,79 @@ function Contacts() {
                     <div className='contacts' >
                         {friendsInfo.friends.map((friend) => (
                             <div className='contact-container' id={friend.id} key={friend.id} onClick={() => setCurrentFriend(friend)}>
-                                <p>{friend.firstname}</p>
+                                <p>{friend.firstname} {friend.lastname[0]}.</p>
                             </div>
                         ))}
                     </div>
+                </div>
+                
+                <div className='profile-container'>
+                    <img alt='profile pic' className='profile-pic' src={require('../site-images/anon-user.png')} />
+                    <h1>{currentFriend.firstname} {currentFriend.middlename} {currentFriend.lastname}</h1>
+                    <p>Username: {currentFriend.username}</p>
+                    <p>DOB: {currentFriend.dob}</p>
+                    <p>Phone Number: {currentFriend.phone_number}</p>
+                    <p>About Me: {currentFriend.about_me}</p>
                 </div>
             </div>
 
             {modals.addFriend === 'active' &&
                 <div className='modal-container' >
-                    <div className='modal-content' >
+                    <div className='add-modal-content' >
                         <span className='close-modal' onClick={() => setModals({'editProfile': 'inactive', 'addFriend': 'inactive'})} >&times;</span>
-                        <h1>Add Friend</h1>
+                        <h1 className='modal-title' >Add Friend</h1>
+                        <div className='login-input-group' >
+                            <input className='login-input' required type='text' id='username' name='friend-user' onChange={handleChange} />
+                            <label className='login-label' for='username'>Username</label>
+                        </div>
+                        <button className='login-submit-btn' onClick={addFriend} >Add</button>
                     </div>
                 </div>
             }
 
             {modals.editProfile === 'active' &&
                 <div className='modal-container' >
-                    <div className='modal-content' >
+                    <div className='edit-modal-content' >
                         <span className='close-modal' onClick={() => setModals({'editProfile': 'inactive', 'addFriend': 'inactive'})} >&times;</span>
-                        <h1>Edit Profile   </h1>
+                        <h1 className='modal-title' >Edit Profile</h1>
+                        <div className='modal-input-group' >
+                            <input className='modal-input' required type='text' id='username' name='username' onChange={handleChange} />
+                            <label className='modal-label' for='username'>Username</label>
+                        </div>
+                        <div className='modal-input-group' >
+                            <input className='modal-input' required type='text' id='firstname' name='firstname' onChange={handleChange} />
+                            <label className='login-label' for='firstname'>First Name</label>
+                        </div>
+                        <div className='modal-input-group' >
+                            <input className='modal-input' required type='text' id='middlename' name='middlename' onChange={handleChange} />
+                            <label className='modal-label' for='middlename'>Middle Name</label>
+                        </div>
+                        <div className='modal-input-group' >
+                            <input className='modal-input' required type='text' id='lastname' name='lastname' onChange={handleChange} />
+                            <label className='modal-label' for='lastname'>Last Name</label>
+                        </div>
+                        <div className='modal-input-group' >
+                            <input className='modal-input' required type='text' id='profile_pic' name='profile_pic' onChange={handleChange} />
+                            <label className='login-label' for='profile_pic'>Profile Picture URL</label>
+                        </div>
+                        <div className='modal-input-group' >
+                            <input className='modal-input' required type='text' id='dob' name='dob' onChange={handleChange} />
+                            <label className='modal-label' for='dob'>Date of Birth</label>
+                        </div>
+                        <div className='modal-input-group' >
+                            <input className='modal-input' required type='text' id='phone_number' name='phone_number' onChange={handleChange} />
+                            <label className='modal-label' for='phone_number'>Phone Number</label>
+                        </div>
+                        <button className='login-submit-btn' onClick={updateProfile} >Add</button>
                     </div>
                 </div>
             }
         </div>
     )
+
+    function handleChange(e){
+        setInputData({...inputData, [e.target.name]: e.target.value})
+    }
 
     function handleNavClick(e){
         if (e.target.name[0] === '/'){
@@ -72,16 +120,58 @@ function Contacts() {
         }
     }
 
+    function updateProfile(){
+        fetch(`/accounts${account.id}`, {
+            method: 'PATCH',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(inputData)
+        })
+
+        setInputData({});
+    }
+
+    function addFriend(){
+        fetch('/accounts')
+            .then(res => res.json())
+            .then(temp_accounts => {
+                const datetime = new Date();
+                let timestamp = datetime.toString().slice(4, 24);
+                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                const month_num = months.indexOf(timestamp.slice(0, 3)) + 1;
+                const convertedTimestamp = `${month_num}/${timestamp.slice(4, 6)}/${timestamp.slice(7, 11)} ${timestamp.slice(12, 17)}`;
+                let friend_account = null;
+
+                for (let i = 0; i < temp_accounts.length; i++){
+                    if (temp_accounts[i].username === inputData['friend-user']){
+                        friend_account = temp_accounts[i];
+                    }
+                }
+
+                fetch('/messages', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        content: `${account.firstname} ${account.lastname} wants to be your friend!`,
+                        sender_id: account.id,
+                        receiver_id: friend_account.id,
+                        timestamp: convertedTimestamp,
+                        seen: false
+                    })
+                })
+            })
+
+        fetchData();
+        setModals({'editProfile': 'inactive', 'addFriend': 'inactive'});
+        setInputData({});
+    }
+
     function fetchData(){
-        let temp_accounts = [];
         const temp_messages = [];
         const temp_friends = [];
 
         fetch('/accounts')
             .then(res => res.json())
-            .then(res => {
-                temp_accounts = [...res]
-
+            .then(temp_accounts => {
                 fetch('/messages')
                     .then(res => res.json())
                     .then(messages => {

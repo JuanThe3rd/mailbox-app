@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
-import MessageBubble from './MessageBubble.js';
 
 function Messages() {
     const history = useHistory();
@@ -24,6 +23,22 @@ function Messages() {
             }
         }
 
+        if (temp_chat.length > 0){
+            if (temp_chat[temp_chat.length - 1].receiver_id === account.id && temp_chat[temp_chat.length - 1].seen === false){
+                fetch(`/messages/${temp_chat[temp_chat.length - 1].id}`, {
+                    method: 'PATCH',
+                    headers : {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        seen: true 
+                    })
+                })
+                    .then(res => res.json())
+                    .then(res => {
+                        temp_chat[temp_chat.length - 1].seen = true;
+                    })
+            }
+        }
+
         setChat(temp_chat);
     }, [currentFriend])
 
@@ -44,8 +59,8 @@ function Messages() {
                     </div>
                     <div className='contacts' >
                         {friendsInfo.friends.map((friend) => (
-                            <div className='contact-container' id={friend.id} key={friend.id} onClick={() => setCurrentFriend(friend)}>
-                                <p>{friend.firstname}</p>
+                            <div className='contact-container' id={friend.id} key={friend.id} onClick={() => changeFriend(friend)}>
+                                <p>{friend.firstname} {friend.lastname[0]}.</p>
                             </div>
                         ))}
                     </div>
@@ -56,7 +71,54 @@ function Messages() {
 
                         <div className='messages-container' id='chat-div' >
                             {chat.map((message) => (
-                                <MessageBubble key={message.id} message={message} account={account} />
+                                <div>
+                                    {message.sender_id === account.id &&
+                                        <div>
+                                            <div className='sent-message-wrapper' >
+                                                <div className='sent-message-bubble' >
+                                                    {message.content}
+                                                </div>
+                                            </div>
+                                            {message === chat[chat.length - 1] &&
+                                                <div>
+                                                    {message.seen &&
+                                                        <div className='sent-message-label'>
+                                                            <p>Read</p>
+                                                        </div>
+                                                    }
+                                                    {!message.seen &&
+                                                        <div className='sent-message-label'>
+                                                            <p>Sent</p>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                    {message.receiver_id === account.id &&
+                                        <div>
+                                            <div className='received-message-wrapper' >
+                                                <div className='received-message-bubble' >
+                                                    {message.content}
+                                                </div>
+                                            </div>
+                                            {message === chat[chat.length - 1] &&
+                                                <div>
+                                                    {message.seen &&
+                                                        <div className='received-message-label'>
+                                                            <p>Read</p>
+                                                        </div>
+                                                    }
+                                                    {!message.seen &&
+                                                        <div className='received-message-label'>
+                                                            <p>Sent</p>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                </div>
                             ))}
                         </div>
 
@@ -75,6 +137,10 @@ function Messages() {
             pathname: e.target.name,
             state: [account]
         })
+    }
+
+    function changeFriend(friend){
+        setCurrentFriend(friend);
     }
 
     function handleChange(e){
@@ -110,15 +176,12 @@ function Messages() {
     }
 
     function fetchData(){
-        let temp_accounts = [];
         const temp_messages = [];
         const temp_friends = [];
 
         fetch('/accounts')
             .then(res => res.json())
-            .then(res => {
-                temp_accounts = [...res]
-
+            .then(temp_accounts => {
                 fetch('/messages')
                     .then(res => res.json())
                     .then(messages => {
