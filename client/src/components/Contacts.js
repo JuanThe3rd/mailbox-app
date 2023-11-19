@@ -33,20 +33,64 @@ function Contacts() {
                     <div className='contacts' >
                         {friendsInfo.friends.map((friend) => (
                             <div className='contact-container' id={friend.id} key={friend.id} onClick={() => setCurrentFriend(friend)}>
-                                <p>{friend.firstname} {friend.lastname[0]}.</p>
+                                {currentFriend.id === friend.id &&
+                                    <div>
+                                        <p>{friend.firstname} {friend.lastname[0]}.</p>
+                                        <div className='active-contact-icon-container'>
+                                            <img className='active-contact-icon' alt='active-contact' src='https://cdn-icons-png.flaticon.com/512/44/44607.png' />
+                                        </div>
+                                    </div>
+                                }
+                                {currentFriend.id !== friend.id &&
+                                    <p>{friend.firstname} {friend.lastname[0]}.</p>
+                                }
                             </div>
                         ))}
                     </div>
                 </div>
                 
-                <div className='profile-container'>
-                    <img alt='profile pic' className='profile-pic' src={require('../site-images/anon-user.png')} />
-                    <h1>{currentFriend.firstname} {currentFriend.middlename} {currentFriend.lastname}</h1>
-                    <p>Username: {currentFriend.username}</p>
-                    <p>DOB: {currentFriend.dob}</p>
-                    <p>Phone Number: {currentFriend.phone_number}</p>
-                    <p>About Me: {currentFriend.about_me}</p>
-                </div>
+                {currentFriend !== null &&
+                    <div className='profile-container'>
+                        {currentFriend.profile_pic === null &&
+                            <img alt='profile pic' className='profile-pic' src={require('../site-images/anon-user.png')} />
+                        }
+                        {currentFriend.profile_pic !== null &&
+                            <img alt='profile pic' className='profile-pic' src={currentFriend.profile_pic} />
+                        }
+                        <h1 className='profile-name'>{currentFriend.firstname} {currentFriend.middlename} {currentFriend.lastname}</h1>
+                        <div className='profile-content-container'>
+                            <p>Username: {currentFriend.username}</p>
+                            {currentFriend.dob === null &&
+                                <div>
+                                    <p>DOB: 00/00/0000</p>
+                                </div>
+                            }
+                            {currentFriend.dob !== null &&
+                                <div>
+                                    <p>DOB: {currentFriend.dob}</p>
+                                </div>
+                            }
+                            {currentFriend.phone_number === null &&
+                                <div>
+                                    <p>Phone Number: (000) 000-0000</p>
+                                </div>
+                            }
+                            {currentFriend.dob !== null &&
+                                <div>
+                                    <p>Phone Number: {currentFriend.dob}</p>
+                                </div>
+                            }
+                            {currentFriend.about_me !== null &&
+                                <div>
+                                    <p>About Me: {currentFriend.about_me}</p>
+                                </div>
+                            }
+                        </div>
+
+                        <button className='nav-btn' onClick={messageFriend} >Message</button>
+                        <button className='nav-btn' onClick={removeFriend} >Remove Friend</button>
+                    </div>
+                }
             </div>
 
             {modals.addFriend === 'active' &&
@@ -163,6 +207,14 @@ function Contacts() {
         fetchData();
         setModals({'editProfile': 'inactive', 'addFriend': 'inactive'});
         setInputData({});
+    }
+
+    function messageFriend(){
+
+    }
+
+    function removeFriend(){
+
     }
 
     function fetchData(){

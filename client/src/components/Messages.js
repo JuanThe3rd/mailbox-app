@@ -60,7 +60,17 @@ function Messages() {
                     <div className='contacts' >
                         {friendsInfo.friends.map((friend) => (
                             <div className='contact-container' id={friend.id} key={friend.id} onClick={() => changeFriend(friend)}>
-                                <p>{friend.firstname} {friend.lastname[0]}.</p>
+                                {currentFriend.id === friend.id &&
+                                    <div>
+                                        <p>{friend.firstname} {friend.lastname[0]}.</p>
+                                        <div className='active-contact-icon-container'>
+                                            <img className='active-contact-icon' alt='active-contact' src='https://cdn-icons-png.flaticon.com/512/44/44607.png' />
+                                        </div>
+                                    </div>
+                                }
+                                {currentFriend.id !== friend.id &&
+                                    <p>{friend.firstname} {friend.lastname[0]}.</p>
+                                }
                             </div>
                         ))}
                     </div>

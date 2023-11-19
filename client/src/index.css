@@ -410,6 +410,16 @@
   transition: all 350ms;
 }
 
+.active-contact-icon-container {
+  margin-top: -2.3rem;
+  text-align: right;
+}
+
+.active-contact-icon {
+  height: auto;
+  width: 5%;
+}
+
 .chat-section {
   border-bottom: 3px solid rgb(94, 94, 94);
   height: 99.6%;
@@ -616,15 +626,6 @@
   margin-right: -0.5rem;
 }
 
-.profile-pic-container {
-  aspect-ratio: 1/1;
-  background-color: black;
-  border-radius: 50%;
-  height: 30%;
-  margin-top: 7%;
-  margin-left: 10%;
-}
-
 .profile-pic {
   aspect-ratio: 1/1;
   border: 10px solid black;
@@ -633,6 +634,20 @@
   margin-top: 7%;
   margin-left: 10%;
   object-fit: cover;
+}
+
+.profile-name {
+  font-size: 2rem;
+  text-align: center;
+  width: 50%;
+}
+
+.profile-content-container {
+  font-size: 1.1rem;
+  margin-left: 5%;
+  margin-top: -1.5rem;
+  padding: 1rem;
+  width: 45%;
 }
 
 .modal-input-group{
