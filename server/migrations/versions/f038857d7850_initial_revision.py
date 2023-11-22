@@ -1,8 +1,8 @@
-"""Creates db
+"""initial revision
 
-Revision ID: 6be5c5f190e6
+Revision ID: f038857d7850
 Revises: 
-Create Date: 2023-11-12 14:28:40.326461
+Create Date: 2023-11-20 12:19:16.860595
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '6be5c5f190e6'
+revision = 'f038857d7850'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -36,7 +36,8 @@ def upgrade():
     sa.Column('content', sa.String(), nullable=False),
     sa.Column('sender_id', sa.Integer(), nullable=True),
     sa.Column('receiver_id', sa.Integer(), nullable=True),
-    sa.Column('timestamp', sa.String(), nullable=True),
+    sa.Column('sent_timestamp', sa.String(), nullable=True),
+    sa.Column('read_timestamp', sa.String(), nullable=True),
     sa.Column('seen', sa.Boolean(), nullable=True),
     sa.ForeignKeyConstraint(['sender_id'], ['accounts.id'], name=op.f('fk_messages_sender_id_accounts')),
     sa.PrimaryKeyConstraint('id')

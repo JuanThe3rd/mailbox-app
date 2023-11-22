@@ -23,24 +23,36 @@ function Messages() {
             }
         }
 
+        const timestamp = new Date().toString().slice(4, 21);
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const month_num = months.indexOf(timestamp.slice(0, 3)) + 1;
+        let converted_timestamp = `${month_num}/${timestamp.slice(4, 6)}/${timestamp.slice(7, 11)}`;
+
+        if (parseInt(timestamp.slice(12, 14)) <= 11){
+            converted_timestamp = converted_timestamp + timestamp.slice(12) + ' AM';
+        } else if (parseInt(timestamp.slice(12, 14)) == 12){
+            converted_timestamp = converted_timestamp + timestamp.slice(12) + ' PM';
+        } else {
+            converted_timestamp = `${converted_timestamp} ${parseInt(timestamp.slice(12, 14)) - 12}:${timestamp.slice(15)} PM`;
+        }
+
+        console.log(converted_timestamp);
+
         if (temp_chat.length > 0){
-            if (temp_chat[temp_chat.length - 1].receiver_id === account.id && temp_chat[temp_chat.length - 1].seen === false){
+            if (temp_chat[temp_chat.length - 1].seen === false && temp_chat[temp_chat.length - 1].receiver_id === account.id){
                 fetch(`/messages/${temp_chat[temp_chat.length - 1].id}`, {
                     method: 'PATCH',
-                    headers : {'Content-Type': 'application/json'},
+                    headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
-                        seen: true 
+                        read_timestamp: converted_timestamp,
+                        seen: true
                     })
                 })
-                    .then(res => res.json())
-                    .then(res => {
-                        temp_chat[temp_chat.length - 1].seen = true;
-                    })
             }
         }
 
         setChat(temp_chat);
-    }, [currentFriend])
+    }, [currentFriend]);
 
     return (
         <div>
@@ -55,7 +67,7 @@ function Messages() {
             <div className='messages-main-content'>
                 <div className='contacts-container'>
                     <div className='contacts-title'>
-                        <h3>Contacts</h3>
+                        <h3>Contacts ({friendsInfo.friends.length})</h3>
                     </div>
                     <div className='contacts' >
                         {friendsInfo.friends.map((friend) => (
@@ -75,10 +87,9 @@ function Messages() {
                         ))}
                     </div>
                 </div>
-                { currentFriend !== null &&
+                {currentFriend !== null &&
                     <div className='chat-section' >
                         <h1 className='chat-contact-name'>{currentFriend.firstname} {`${currentFriend.lastname[0]}.`}</h1>
-
                         <div className='messages-container' id='chat-div' >
                             {chat.map((message) => (
                                 <div>
@@ -90,16 +101,12 @@ function Messages() {
                                                 </div>
                                             </div>
                                             {message === chat[chat.length - 1] &&
-                                                <div>
-                                                    {message.seen &&
-                                                        <div className='sent-message-label'>
-                                                            <p>Read</p>
-                                                        </div>
+                                                <div className='sent-message-label'>
+                                                    {message.seen === false &&
+                                                        <p>Sent {message.sent_timestamp.slice(11)}</p>
                                                     }
-                                                    {!message.seen &&
-                                                        <div className='sent-message-label'>
-                                                            <p>Sent</p>
-                                                        </div>
+                                                    {message.seen === true &&
+                                                        <p>Sent {message.read_timestamp.slice(11)}</p>
                                                     }
                                                 </div>
                                             }
@@ -113,16 +120,12 @@ function Messages() {
                                                 </div>
                                             </div>
                                             {message === chat[chat.length - 1] &&
-                                                <div>
-                                                    {message.seen &&
-                                                        <div className='received-message-label'>
-                                                            <p>Read</p>
-                                                        </div>
+                                                <div className='received-message-label'>
+                                                    {message.seen === false &&
+                                                        <p>Read</p>
                                                     }
-                                                    {!message.seen &&
-                                                        <div className='received-message-label'>
-                                                            <p>Sent</p>
-                                                        </div>
+                                                    {message.seen === true &&
+                                                        <p>Read</p>
                                                     }
                                                 </div>
                                             }
@@ -158,12 +161,18 @@ function Messages() {
     }
 
     function sendMessage(e){
-        const datetime = new Date();
-        let timestamp = datetime.toString().slice(4, 24);
+        const timestamp = new Date().toString().slice(4, 21);
         const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         const month_num = months.indexOf(timestamp.slice(0, 3)) + 1;
+        let converted_timestamp = `${month_num}/${timestamp.slice(4, 6)}/${timestamp.slice(7, 11)}`;
 
-        const convertedTimestamp = `${month_num}/${timestamp.slice(4, 6)}/${timestamp.slice(7, 11)} ${timestamp.slice(12, 17)}`;
+        if (parseInt(timestamp.slice(12, 14)) <= 11){
+            converted_timestamp = converted_timestamp + timestamp.slice(12) + ' AM';
+        } else if (parseInt(timestamp.slice(12, 14)) == 12){
+            converted_timestamp = converted_timestamp + timestamp.slice(12) + ' PM';
+        } else {
+            converted_timestamp = `${converted_timestamp} ${parseInt(timestamp.slice(12, 14)) - 12}:${timestamp.slice(15)} PM`;
+        }
 
         if (newMessage !== ''){
             fetch('/messages', {
@@ -173,7 +182,8 @@ function Messages() {
                     content: newMessage,
                     sender_id: account.id,
                     receiver_id: currentFriend.id,
-                    timestamp: convertedTimestamp,
+                    sent_timestamp: converted_timestamp,
+                    read_timestamp: null,
                     seen: false
                 })
             })

@@ -34,7 +34,8 @@ class Message(db.Model, SerializerMixin):
     content = db.Column(db.String, nullable=False)
     sender_id = db.Column(db.Integer, db.ForeignKey('accounts.id'))
     receiver_id = db.Column(db.Integer)
-    timestamp = db.Column(db.String)
+    sent_timestamp = db.Column(db.String)
+    read_timestamp = db.Column(db.String)
     seen = db.Column(db.Boolean)
 
     serialize_rules = ('-account.messages',)

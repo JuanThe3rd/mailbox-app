@@ -5,6 +5,7 @@ function Contacts() {
     const history = useHistory();
     const location = useLocation();
     const account = location.state[0];
+    const [errorMsg, setErrorMsg] = useState(null);
     const [friendsInfo, setFriendsInfo] = useState({'messages': [], 'friends': []});
     const [currentFriend, setCurrentFriend] = useState(null);
     const [modals, setModals] = useState({'editProfile': 'inactive', 'addFriend': 'inactive'})
@@ -28,7 +29,7 @@ function Contacts() {
             <div className='messages-main-content'>
                 <div className='contacts-container'>
                     <div className='contacts-title'>
-                        <h3>Contacts</h3>
+                        <h3>Contacts ({friendsInfo.friends.length})</h3>
                     </div>
                     <div className='contacts' >
                         {friendsInfo.friends.map((friend) => (
@@ -51,13 +52,24 @@ function Contacts() {
                 
                 {currentFriend !== null &&
                     <div className='profile-container'>
-                        {currentFriend.profile_pic === null &&
-                            <img alt='profile pic' className='profile-pic' src={require('../site-images/anon-user.png')} />
-                        }
-                        {currentFriend.profile_pic !== null &&
-                            <img alt='profile pic' className='profile-pic' src={currentFriend.profile_pic} />
-                        }
-                        <h1 className='profile-name'>{currentFriend.firstname} {currentFriend.middlename} {currentFriend.lastname}</h1>
+                        <div className='profile-header-container'>
+                            <div className='profile-header-title'>
+                                {currentFriend.profile_pic === null &&
+                                    <img alt='profile pic' className='profile-pic' src={require('../site-images/anon-user.png')} />
+                                }
+                                {currentFriend.profile_pic !== null &&
+                                    <img alt='profile pic' className='profile-pic' src={currentFriend.profile_pic} />
+                                }
+                                <h1 className='profile-name'>{currentFriend.firstname} {currentFriend.middlename} {currentFriend.lastname}</h1>
+                            </div>
+
+                            <div className='profile-content-buttons'>
+                                <button className='profile-btn' onClick={messageFriend} >Message</button>
+                                <br />
+                                <button className='profile-btn' onClick={removeFriend} >Remove Friend</button>
+                            </div>
+                        </div>
+
                         <div className='profile-content-container'>
                             <p>Username: {currentFriend.username}</p>
                             {currentFriend.dob === null &&
@@ -75,9 +87,9 @@ function Contacts() {
                                     <p>Phone Number: (000) 000-0000</p>
                                 </div>
                             }
-                            {currentFriend.dob !== null &&
+                            {currentFriend.phone_number !== null &&
                                 <div>
-                                    <p>Phone Number: {currentFriend.dob}</p>
+                                    <p>Phone Number: {currentFriend.phone_number}</p>
                                 </div>
                             }
                             {currentFriend.about_me !== null &&
@@ -86,9 +98,6 @@ function Contacts() {
                                 </div>
                             }
                         </div>
-
-                        <button className='nav-btn' onClick={messageFriend} >Message</button>
-                        <button className='nav-btn' onClick={removeFriend} >Remove Friend</button>
                     </div>
                 }
             </div>
@@ -98,6 +107,11 @@ function Contacts() {
                     <div className='add-modal-content' >
                         <span className='close-modal' onClick={() => setModals({'editProfile': 'inactive', 'addFriend': 'inactive'})} >&times;</span>
                         <h1 className='modal-title' >Add Friend</h1>
+                        {errorMsg !== null &&
+                            <div className='error-msg'>
+                                <p>{errorMsg}</p>
+                            </div>
+                        }
                         <div className='login-input-group' >
                             <input className='login-input' required type='text' id='username' name='friend-user' onChange={handleChange} />
                             <label className='login-label' for='username'>Username</label>
@@ -178,12 +192,19 @@ function Contacts() {
         fetch('/accounts')
             .then(res => res.json())
             .then(temp_accounts => {
-                const datetime = new Date();
-                let timestamp = datetime.toString().slice(4, 24);
+                let friend_account = null;
+                const timestamp = new Date().toString().slice(4, 21);
                 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
                 const month_num = months.indexOf(timestamp.slice(0, 3)) + 1;
-                const convertedTimestamp = `${month_num}/${timestamp.slice(4, 6)}/${timestamp.slice(7, 11)} ${timestamp.slice(12, 17)}`;
-                let friend_account = null;
+                let converted_timestamp = `${month_num}/${timestamp.slice(4, 6)}/${timestamp.slice(7, 11)}`;
+
+                if (parseInt(timestamp.slice(12, 14)) <= 11){
+                    converted_timestamp = converted_timestamp + timestamp.slice(12) + ' AM';
+                } else if (parseInt(timestamp.slice(12, 14)) == 12){
+                    converted_timestamp = converted_timestamp + timestamp.slice(12) + ' PM';
+                } else {
+                    converted_timestamp = `${converted_timestamp} ${parseInt(timestamp.slice(12, 14)) - 12}:${timestamp.slice(15)} PM`;
+                }
 
                 for (let i = 0; i < temp_accounts.length; i++){
                     if (temp_accounts[i].username === inputData['friend-user']){
@@ -191,22 +212,31 @@ function Contacts() {
                     }
                 }
 
-                fetch('/messages', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        content: `${account.firstname} ${account.lastname} wants to be your friend!`,
-                        sender_id: account.id,
-                        receiver_id: friend_account.id,
-                        timestamp: convertedTimestamp,
-                        seen: false
+                if (friend_account !== null){
+                    fetch('/messages', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({
+                            content: `${account.firstname} ${account.lastname} wants to be your friend!`,
+                            sender_id: account.id,
+                            receiver_id: friend_account.id,
+                            sent_timestamp: converted_timestamp,
+                            read_timestamp: null,
+                            seen: false
+                        })
                     })
-                })
-            })
 
-        fetchData();
-        setModals({'editProfile': 'inactive', 'addFriend': 'inactive'});
-        setInputData({});
+                    fetchData();
+                    setModals({'editProfile': 'inactive', 'addFriend': 'inactive'});
+                    setInputData({});
+                } else {
+                    setErrorMsg('Username not found!');
+
+                    setTimeout(() => {
+                        setErrorMsg(null);
+                    }, 2000)
+                }
+            })
     }
 
     function messageFriend(){
@@ -214,7 +244,11 @@ function Contacts() {
     }
 
     function removeFriend(){
+        fetch(`/messages${currentFriend.id}`, {method: 'DELETE'})
+            .then(res => res.json())
+            .then(deletedMessage => {
 
+            })
     }
 
     function fetchData(){
