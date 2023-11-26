@@ -36,8 +36,6 @@ function Messages() {
             converted_timestamp = `${converted_timestamp} ${parseInt(timestamp.slice(12, 14)) - 12}:${timestamp.slice(15)} PM`;
         }
 
-        console.log(converted_timestamp);
-
         if (temp_chat.length > 0){
             if (temp_chat[temp_chat.length - 1].seen === false && temp_chat[temp_chat.length - 1].receiver_id === account.id){
                 fetch(`/messages/${temp_chat[temp_chat.length - 1].id}`, {
@@ -45,6 +43,14 @@ function Messages() {
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
                         read_timestamp: converted_timestamp,
+                        seen: true
+                    })
+                })
+
+                fetch(`/messages/${temp_chat[temp_chat.length - 1].id}`, {
+                    method: 'PATCH',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
                         seen: true
                     })
                 })
@@ -102,11 +108,11 @@ function Messages() {
                                             </div>
                                             {message === chat[chat.length - 1] &&
                                                 <div className='sent-message-label'>
-                                                    {message.seen === false &&
+                                                    {message.seen === false && message.sent_timestamp !== null &&
                                                         <p>Sent {message.sent_timestamp.slice(11)}</p>
                                                     }
-                                                    {message.seen === true &&
-                                                        <p>Sent {message.read_timestamp.slice(11)}</p>
+                                                    {message.seen === true && message.read_timestamp !== null &&
+                                                        <p>Read {message.read_timestamp.slice(11)}</p>
                                                     }
                                                 </div>
                                             }
@@ -121,11 +127,11 @@ function Messages() {
                                             </div>
                                             {message === chat[chat.length - 1] &&
                                                 <div className='received-message-label'>
-                                                    {message.seen === false &&
-                                                        <p>Read</p>
+                                                    {message.seen === false && message.sent_timestamp !== null &&
+                                                        <p>Sent {message.sent_timestamp.slice(11)}</p>
                                                     }
-                                                    {message.seen === true &&
-                                                        <p>Read</p>
+                                                    {message.seen === true &&  message.read_timestamp !== null &&
+                                                        <p>Read {message.read_timestamp.slice(11)}</p>
                                                     }
                                                 </div>
                                             }

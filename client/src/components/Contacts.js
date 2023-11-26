@@ -5,15 +5,31 @@ function Contacts() {
     const history = useHistory();
     const location = useLocation();
     const account = location.state[0];
+
+    const [inputData, setInputData] = useState({});
     const [errorMsg, setErrorMsg] = useState(null);
+
     const [friendsInfo, setFriendsInfo] = useState({'messages': [], 'friends': []});
     const [currentFriend, setCurrentFriend] = useState(null);
-    const [modals, setModals] = useState({'editProfile': 'inactive', 'addFriend': 'inactive'})
-    const [inputData, setInputData] = useState({});
+    const [chat, setChat] = useState(null);
+
+    const [modals, setModals] = useState({'editProfile': 'inactive', 'addFriend': 'inactive'});
 
     useEffect(() => {
         fetchData();
     }, []);
+
+    useEffect(() => {
+        const temp_chat = [];
+
+        for (let i = 0; i < friendsInfo.messages.length; i++){
+            if (friendsInfo.messages[i].sender_id === currentFriend.id || friendsInfo.messages[i].receiver_id === currentFriend.id){
+                temp_chat.push(friendsInfo.messages[i]);
+            }
+        }
+
+        setChat(temp_chat);
+    }, [currentFriend]);
 
     return(
         <div>
@@ -212,7 +228,27 @@ function Contacts() {
                     }
                 }
 
-                if (friend_account !== null){
+                let flag = false;
+
+                for (let i = 0; i < friendsInfo.friends.length; i++){
+                    if (friend_account.id === friendsInfo.friends[i].id){
+                        flag = true;
+                    }
+                }
+
+                if (friend_account === null){
+                    setErrorMsg('Username not found!');
+
+                    setTimeout(() => {
+                        setErrorMsg(null);
+                    }, 2000)
+                } else if (flag){
+                    setErrorMsg('Friend already added!');
+
+                    setTimeout(() => {
+                        setErrorMsg(null);
+                    }, 2000)
+                } else {
                     fetch('/messages', {
                         method: 'POST',
                         headers: {'Content-Type': 'application/json'},
@@ -229,12 +265,6 @@ function Contacts() {
                     fetchData();
                     setModals({'editProfile': 'inactive', 'addFriend': 'inactive'});
                     setInputData({});
-                } else {
-                    setErrorMsg('Username not found!');
-
-                    setTimeout(() => {
-                        setErrorMsg(null);
-                    }, 2000)
                 }
             })
     }
@@ -244,11 +274,11 @@ function Contacts() {
     }
 
     function removeFriend(){
-        fetch(`/messages${currentFriend.id}`, {method: 'DELETE'})
-            .then(res => res.json())
-            .then(deletedMessage => {
+        for (let i = 0; i < chat.length; i++){
+            fetch(`/messages/${chat[i].id}`, {method: 'DELETE',})
+        }
 
-            })
+        fetchData();
     }
 
     function fetchData(){
