@@ -5,6 +5,7 @@ function Messages() {
     const history = useHistory();
     const location = useLocation();
     const account = location.state[0];
+    const friend_from_contacts = location.state[1];
     const [friendsInfo, setFriendsInfo] = useState({'messages': [], 'friends': []});
     const [currentFriend, setCurrentFriend] = useState(null);
     const [chat, setChat] = useState(null);
@@ -54,6 +55,10 @@ function Messages() {
                         seen: true
                     })
                 })
+                    .then(res => res.json())
+                    .then(res => {
+                        fetchData(false);
+                    })
             }
         }
 
@@ -201,7 +206,7 @@ function Messages() {
         }
     }
 
-    function fetchData(){
+    function fetchData(change_friend=true){
         const temp_messages = [];
         const temp_friends = [];
 
@@ -246,7 +251,14 @@ function Messages() {
                         }
 
                         setFriendsInfo({'messages': temp_messages, 'friends': temp_friends});
-                        setCurrentFriend(temp_friends[0]);
+
+                        if (change_friend){
+                            if (friend_from_contacts === undefined){
+                                setCurrentFriend(temp_friends[0]);
+                            } else {
+                                setCurrentFriend(friend_from_contacts);
+                            }
+                        }
                     });
             })
     }

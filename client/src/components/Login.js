@@ -125,7 +125,7 @@ function Login() {
             if (account !== null){
                 history.push({
                     pathname: '/messages',
-                    state: [account, temp_accounts]
+                    state: [account]
                 })
             } else {
                 setErrorMsg('Either Username or Password is incorrect.')

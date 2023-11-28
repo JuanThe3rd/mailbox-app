@@ -170,7 +170,7 @@
 }
 
 .login-label{
-  color: #000000;
+  color: rgb(136,137,142);
   left: 1rem;
   pointer-events: none;
   position: absolute;
@@ -721,7 +721,7 @@
 }
 
 .modal-label{
-  color: #000000;
+  color: rgb(136,137,142);
   left: 1rem;
   pointer-events: none;
   position: absolute;

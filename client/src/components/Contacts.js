@@ -6,7 +6,7 @@ function Contacts() {
     const location = useLocation();
     const account = location.state[0];
 
-    const [inputData, setInputData] = useState({});
+    const [inputData, setInputData] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
 
     const [friendsInfo, setFriendsInfo] = useState({'messages': [], 'friends': []});
@@ -50,7 +50,15 @@ function Contacts() {
                     <div className='contacts' >
                         {friendsInfo.friends.map((friend) => (
                             <div className='contact-container' id={friend.id} key={friend.id} onClick={() => setCurrentFriend(friend)}>
-                                {currentFriend.id === friend.id &&
+                                {currentFriend.id === friend.id && friend.id === account.id &&
+                                    <div>
+                                        <p>{friend.firstname} {friend.lastname[0]}. (Me)</p>
+                                        <div className='active-contact-icon-container'>
+                                            <img className='active-contact-icon' alt='active-contact' src='https://cdn-icons-png.flaticon.com/512/44/44607.png' />
+                                        </div>
+                                    </div>
+                                }
+                                {currentFriend.id === friend.id && friend.id !== account.id &&
                                     <div>
                                         <p>{friend.firstname} {friend.lastname[0]}.</p>
                                         <div className='active-contact-icon-container'>
@@ -58,7 +66,10 @@ function Contacts() {
                                         </div>
                                     </div>
                                 }
-                                {currentFriend.id !== friend.id &&
+                                {friend.id === account.id && currentFriend.id !== friend.id &&
+                                    <p>{friend.firstname} {friend.lastname[0]}. (Me)</p>
+                                }
+                                {friend.id !== account.id && currentFriend.id !== friend.id &&
                                     <p>{friend.firstname} {friend.lastname[0]}.</p>
                                 }
                             </div>
@@ -142,6 +153,9 @@ function Contacts() {
                     <div className='edit-modal-content' >
                         <span className='close-modal' onClick={() => setModals({'editProfile': 'inactive', 'addFriend': 'inactive'})} >&times;</span>
                         <h1 className='modal-title' >Edit Profile</h1>
+                        {errorMsg &&
+                            <p className='error-msg'>{errorMsg}</p>
+                        }
                         <div className='modal-input-group' >
                             <input className='modal-input' required type='text' id='username' name='username' onChange={handleChange} />
                             <label className='modal-label' for='username'>Username</label>
@@ -195,13 +209,27 @@ function Contacts() {
     }
 
     function updateProfile(){
-        fetch(`/accounts${account.id}`, {
-            method: 'PATCH',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(inputData)
-        })
+        if (inputData !== null || !Object.keys(inputData).includes('')){
+            fetch(`/accounts/${account.id}`, {
+                method: 'PATCH',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(inputData)
+            })
+                .then(res => res.json())
+                .then(patchedAccount => {
+                    fetchData();
+                    setModals({'editProfile': 'inactive', 'addFriend': 'inactive'});
+                })
+        } else {
+            setErrorMsg('Please fill out information...');
 
-        setInputData({});
+            setTimeout(() => {
+                setErrorMsg(null)
+            }, 2000)
+        }
+
+
+        setInputData(null);
     }
 
     function addFriend(){
@@ -264,13 +292,16 @@ function Contacts() {
 
                     fetchData();
                     setModals({'editProfile': 'inactive', 'addFriend': 'inactive'});
-                    setInputData({});
+                    setInputData(null);
                 }
             })
     }
 
     function messageFriend(){
-
+        history.push({
+            pathname: '/messages',
+            state: [account, currentFriend]
+        })
     }
 
     function removeFriend(){
@@ -324,6 +355,8 @@ function Contacts() {
                                 }
                             }
                         }
+
+                        temp_friends.unshift(account);
 
                         setFriendsInfo({'messages': temp_messages, 'friends': temp_friends});
                         setCurrentFriend(temp_friends[0]);
