@@ -102,7 +102,7 @@ function Messages() {
                         ))}
                     </div>
                 </div>
-                {currentFriend !== null &&
+                {currentFriend !== null && friendsInfo.friends.length !== 0 &&
                     <div className='chat-section' >
                         <h1 className='chat-contact-name'>{currentFriend.firstname} {`${currentFriend.lastname[0]}.`}</h1>
                         <div className='messages-container' id='chat-div' >
@@ -118,7 +118,7 @@ function Messages() {
                                             {message === chat[0] &&
                                                 <div className='sent-message-label'>
                                                     {message.seen === false && message.sent_timestamp !== null &&
-                                                        <p>Sent {message.sent_timestamp.slice(11)}</p>
+                                                        <p>Sent {message.sent_timestamp.slice(10)}</p>
                                                     }
                                                     {message.seen === true && message.read_timestamp !== null &&
                                                         <p>Read {message.read_timestamp.slice(10)}</p>
@@ -137,7 +137,7 @@ function Messages() {
                                             {message === chat[0] &&
                                                 <div className='received-message-label'>
                                                     {message.seen === false && message.sent_timestamp !== null &&
-                                                        <p>Sent {message.sent_timestamp.slice(11)}</p>
+                                                        <p>Sent {message.sent_timestamp.slice(10)}</p>
                                                     }
                                                     {message.seen === true &&  message.read_timestamp !== null &&
                                                         <p>Read {message.read_timestamp.slice(10)}</p>

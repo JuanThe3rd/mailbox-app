@@ -35,6 +35,8 @@ function Contacts() {
         fetchData();
     }, [modals])
 
+    console.log(friendsInfo);
+
     return(
         <div>
             <div className='navbar-container' >
@@ -49,10 +51,10 @@ function Contacts() {
             <div className='messages-main-content'>
                 <div className='contacts-container'>
                     <div className='contacts-title'>
-                        <h3>Contacts ({friendsInfo.friends.length})</h3>
+                        <h3>Contacts ({friendsInfo.friends.length - 1})</h3>
                     </div>
                     <div className='contacts' >
-                        {friendsInfo.friends.map((friend) => (
+                        {friendsInfo.friends.length > 0 && friendsInfo.friends.map((friend) => (
                             <div className='contact-container' id={friend.id} key={friend.id} onClick={() => setCurrentFriend(friend)}>
                                 {currentFriend.id === friend.id && friend.id === account.id &&
                                     <div>
@@ -238,72 +240,78 @@ function Contacts() {
     }
 
     function verifyInputData(){
-        return true;
+        if (Object.values(inputData).includes('')){
+            return false;
+        } else {
+            return true;
+        }
     }
 
     function addFriend(){
-        fetch('/accounts')
-            .then(res => res.json())
-            .then(temp_accounts => {
-                let friend_account = null;
-                const timestamp = new Date().toString().slice(4, 21);
-                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-                const month_num = months.indexOf(timestamp.slice(0, 3)) + 1;
-                let converted_timestamp = `${month_num}/${timestamp.slice(4, 6)}/${timestamp.slice(7, 11)}`;
+        if (verifyInputData){
+            fetch('/accounts')
+                .then(res => res.json())
+                .then(temp_accounts => {
+                    let friend_account = null;
+                    const timestamp = new Date().toString().slice(4, 21);
+                    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                    const month_num = months.indexOf(timestamp.slice(0, 3)) + 1;
+                    let converted_timestamp = `${month_num}/${timestamp.slice(4, 6)}/${timestamp.slice(7, 11)}`;
 
-                if (parseInt(timestamp.slice(12, 14)) <= 11){
-                    converted_timestamp = converted_timestamp + timestamp.slice(12) + ' AM';
-                } else if (parseInt(timestamp.slice(12, 14)) == 12){
-                    converted_timestamp = converted_timestamp + timestamp.slice(12) + ' PM';
-                } else {
-                    converted_timestamp = `${converted_timestamp} ${parseInt(timestamp.slice(12, 14)) - 12}:${timestamp.slice(15)} PM`;
-                }
-
-                for (let i = 0; i < temp_accounts.length; i++){
-                    if (temp_accounts[i].username === inputData['friend-user']){
-                        friend_account = temp_accounts[i];
+                    if (parseInt(timestamp.slice(12, 14)) <= 11){
+                        converted_timestamp = converted_timestamp + timestamp.slice(12) + ' AM';
+                    } else if (parseInt(timestamp.slice(12, 14)) == 12){
+                        converted_timestamp = converted_timestamp + timestamp.slice(12) + ' PM';
+                    } else {
+                        converted_timestamp = `${converted_timestamp} ${parseInt(timestamp.slice(12, 14)) - 12}:${timestamp.slice(15)} PM`;
                     }
-                }
 
-                let flag = false;
-
-                for (let i = 0; i < friendsInfo.friends.length; i++){
-                    if (friend_account.id === friendsInfo.friends[i].id){
-                        flag = true;
+                    for (let i = 0; i < temp_accounts.length; i++){
+                        if (temp_accounts[i].username === inputData['friend-user']){
+                            friend_account = temp_accounts[i];
+                        }
                     }
-                }
 
-                if (friend_account === null){
-                    setErrorMsg('Username not found!');
+                    let flag = false;
 
-                    setTimeout(() => {
-                        setErrorMsg(null);
-                    }, 2000)
-                } else if (flag){
-                    setErrorMsg('Friend already added!');
+                    for (let i = 0; i < friendsInfo.friends.length; i++){
+                        if (friend_account.id === friendsInfo.friends[i].id){
+                            flag = true;
+                        }
+                    }
 
-                    setTimeout(() => {
-                        setErrorMsg(null);
-                    }, 2000)
-                } else {
-                    fetch('/messages', {
-                        method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({
-                            content: `${account.firstname} ${account.lastname} wants to be your friend!`,
-                            sender_id: account.id,
-                            receiver_id: friend_account.id,
-                            sent_timestamp: converted_timestamp,
-                            read_timestamp: null,
-                            seen: false
+                    if (friend_account === null){
+                        setErrorMsg('Username not found!');
+
+                        setTimeout(() => {
+                            setErrorMsg(null);
+                        }, 2000)
+                    } else if (flag){
+                        setErrorMsg('Friend already added!');
+
+                        setTimeout(() => {
+                            setErrorMsg(null);
+                        }, 2000)
+                    } else {
+                        fetch('/messages', {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({
+                                content: `${account.firstname} ${account.lastname} wants to be your friend!`,
+                                sender_id: account.id,
+                                receiver_id: friend_account.id,
+                                sent_timestamp: converted_timestamp,
+                                read_timestamp: null,
+                                seen: false
+                            })
                         })
-                    })
 
-                    fetchData();
-                    setModals({'editProfile': 'inactive', 'addFriend': 'inactive'});
-                    setInputData(null);
-                }
-            })
+                        fetchData();
+                        setModals({'editProfile': 'inactive', 'addFriend': 'inactive'});
+                        setInputData(null);
+                    }
+                })
+        }
     }
 
     function messageFriend(){
@@ -367,7 +375,17 @@ function Contacts() {
                             };
                         };
 
-                        const my_account = temp_friends.shift();
+                        let my_account = null;
+
+                        if (temp_friends.length > 0){
+                            my_account = temp_friends.shift()
+                        } else {
+                            for(let i = 0; i < temp_accounts.length; i++){
+                                if (temp_accounts[i].id === account.id){
+                                    my_account = temp_accounts[i];
+                                }
+                            }
+                        }
 
                         for (let i = 0; i < temp_friends.length; i++){
                             for (let j = 0; j < (temp_friends.length - i - 1); j++){
