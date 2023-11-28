@@ -43,8 +43,7 @@ function Messages() {
                     method: 'PATCH',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
-                        read_timestamp: converted_timestamp,
-                        seen: true
+                        read_timestamp: converted_timestamp
                     })
                 })
 
@@ -57,12 +56,17 @@ function Messages() {
                 })
                     .then(res => res.json())
                     .then(res => {
-                        fetchData(false);
+                        const temp_messages = friendsInfo.messages;
+                        temp_messages.pop();
+                        temp_messages.push(res);
+
+                        setFriendsInfo({'messages': temp_messages, 'friends': friendsInfo.friends});
+                        setChat(temp_messages.reverse());
                     })
             }
         }
 
-        setChat(temp_chat);
+        setChat(temp_chat.reverse());
     }, [currentFriend]);
 
     return (
@@ -111,7 +115,7 @@ function Messages() {
                                                     {message.content}
                                                 </div>
                                             </div>
-                                            {message === chat[chat.length - 1] &&
+                                            {message === chat[0] &&
                                                 <div className='sent-message-label'>
                                                     {message.seen === false && message.sent_timestamp !== null &&
                                                         <p>Sent {message.sent_timestamp.slice(11)}</p>
@@ -130,7 +134,7 @@ function Messages() {
                                                     {message.content}
                                                 </div>
                                             </div>
-                                            {message === chat[chat.length - 1] &&
+                                            {message === chat[0] &&
                                                 <div className='received-message-label'>
                                                     {message.seen === false && message.sent_timestamp !== null &&
                                                         <p>Sent {message.sent_timestamp.slice(11)}</p>
