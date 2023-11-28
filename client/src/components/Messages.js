@@ -121,7 +121,7 @@ function Messages() {
                                                         <p>Sent {message.sent_timestamp.slice(11)}</p>
                                                     }
                                                     {message.seen === true && message.read_timestamp !== null &&
-                                                        <p>Read {message.read_timestamp.slice(11)}</p>
+                                                        <p>Read {message.read_timestamp.slice(10)}</p>
                                                     }
                                                 </div>
                                             }
@@ -140,7 +140,7 @@ function Messages() {
                                                         <p>Sent {message.sent_timestamp.slice(11)}</p>
                                                     }
                                                     {message.seen === true &&  message.read_timestamp !== null &&
-                                                        <p>Read {message.read_timestamp.slice(11)}</p>
+                                                        <p>Read {message.read_timestamp.slice(10)}</p>
                                                     }
                                                 </div>
                                             }
@@ -179,7 +179,7 @@ function Messages() {
         const timestamp = new Date().toString().slice(4, 21);
         const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         const month_num = months.indexOf(timestamp.slice(0, 3)) + 1;
-        let converted_timestamp = `${month_num}/${timestamp.slice(4, 6)}/${timestamp.slice(7, 11)}`;
+        let converted_timestamp = `${month_num}/${timestamp.slice(4, 6)}/${timestamp.slice(7, 11)} `;
 
         if (parseInt(timestamp.slice(12, 14)) <= 11){
             converted_timestamp = converted_timestamp + timestamp.slice(12) + ' AM';
@@ -204,7 +204,9 @@ function Messages() {
             })
                 .then(res => res.json())
                 .then(new_message => {
-                    setChat([...chat, new_message]);
+                    const new_chat = [...chat];
+                    new_chat.unshift(new_message);
+                    setChat(new_chat);
                     setNewMessage('');
                 })
         }
