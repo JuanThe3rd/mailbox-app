@@ -215,7 +215,7 @@ function Contacts() {
 
     function updateProfile(){
         if (inputData !== null){
-            if (!Object.keys(inputData).includes('')){
+            if (verifyInputData){
                 fetch(`/accounts/${account.id}`, {
                     method: 'PATCH',
                     headers: {'Content-Type': 'application/json'},
@@ -235,6 +235,10 @@ function Contacts() {
         }
 
         setInputData(null);
+    }
+
+    function verifyInputData(){
+        return true;
     }
 
     function addFriend(){
