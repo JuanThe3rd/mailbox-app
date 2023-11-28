@@ -81,7 +81,7 @@ function Login() {
                             <input className='login-submit-btn' type='submit' value='Sign-Up' />
                         </form>
                         {errorMsg &&
-                            <p>{errorMsg}</p>
+                            <p className='error-msg'>{errorMsg}</p>
                         }
                     </div>
 

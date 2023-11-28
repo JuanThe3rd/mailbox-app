@@ -216,18 +216,16 @@ function Contacts() {
     }
 
     function updateProfile(){
-        if (inputData !== null){
-            if (verifyInputData){
-                fetch(`/accounts/${account.id}`, {
-                    method: 'PATCH',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(inputData)
+        if (verifyInputData){
+            fetch(`/accounts/${account.id}`, {
+                method: 'PATCH',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(inputData)
+            })
+                .then(res => res.json())
+                .then(patchedAccount => {
+                    setModals({'editProfile': 'inactive', 'addFriend': 'inactive'});
                 })
-                    .then(res => res.json())
-                    .then(patchedAccount => {
-                        setModals({'editProfile': 'inactive', 'addFriend': 'inactive'});
-                    })
-            }
         } else {
             setErrorMsg('Please fill out information...');
 
@@ -240,7 +238,7 @@ function Contacts() {
     }
 
     function verifyInputData(){
-        if (Object.values(inputData).includes('')){
+        if (inputData === null || Object.values(inputData).includes('')){
             return false;
         } else {
             return true;
