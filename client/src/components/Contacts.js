@@ -31,6 +31,10 @@ function Contacts() {
         setChat(temp_chat);
     }, [currentFriend]);
 
+    useEffect(() => {
+        fetchData();
+    }, [modals])
+
     return(
         <div>
             <div className='navbar-container' >
@@ -89,12 +93,13 @@ function Contacts() {
                                 }
                                 <h1 className='profile-name'>{currentFriend.firstname} {currentFriend.middlename} {currentFriend.lastname}</h1>
                             </div>
-
-                            <div className='profile-content-buttons'>
-                                <button className='profile-btn' onClick={messageFriend} >Message</button>
-                                <br />
-                                <button className='profile-btn' onClick={removeFriend} >Remove Friend</button>
-                            </div>
+                            {currentFriend.id !== account.id &&
+                                <div className='profile-content-buttons'>
+                                    <button className='profile-btn' onClick={messageFriend} >Message</button>
+                                    <br />
+                                    <button className='profile-btn' onClick={removeFriend} >Remove Friend</button>
+                                </div>
+                            }
                         </div>
 
                         <div className='profile-content-container'>
@@ -209,17 +214,18 @@ function Contacts() {
     }
 
     function updateProfile(){
-        if (inputData !== null || !Object.keys(inputData).includes('')){
-            fetch(`/accounts/${account.id}`, {
-                method: 'PATCH',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(inputData)
-            })
-                .then(res => res.json())
-                .then(patchedAccount => {
-                    fetchData();
-                    setModals({'editProfile': 'inactive', 'addFriend': 'inactive'});
+        if (inputData !== null){
+            if (!Object.keys(inputData).includes('')){
+                fetch(`/accounts/${account.id}`, {
+                    method: 'PATCH',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(inputData)
                 })
+                    .then(res => res.json())
+                    .then(patchedAccount => {
+                        setModals({'editProfile': 'inactive', 'addFriend': 'inactive'});
+                    })
+            }
         } else {
             setErrorMsg('Please fill out information...');
 
@@ -227,7 +233,6 @@ function Contacts() {
                 setErrorMsg(null)
             }, 2000)
         }
-
 
         setInputData(null);
     }
@@ -330,7 +335,13 @@ function Contacts() {
                                     if (messages[i].receiver_id === temp_accounts[j].id){
                                         if (!temp_friends.includes(temp_accounts[j])){
                                             temp_friends.push(temp_accounts[j]);
-                                        }
+                                        };
+                                    };
+
+                                    if (temp_accounts[j].id === account.id){
+                                        if (!temp_friends.includes(temp_accounts[j])){
+                                            temp_friends.unshift(temp_accounts[j]);
+                                        };
                                     };
                                 };
                             } else if (messages[i].receiver_id === account.id){
@@ -340,11 +351,19 @@ function Contacts() {
                                     if (messages[i].sender_id === temp_accounts[j].id){
                                         if (!temp_friends.includes(temp_accounts[j])){
                                             temp_friends.push(temp_accounts[j]);
-                                        }
+                                        };
+                                    };
+
+                                    if (temp_accounts[j].id === account.id){
+                                        if (!temp_friends.includes(temp_accounts[j])){
+                                            temp_friends.unshift(temp_accounts[j]);
+                                        };
                                     };
                                 };
                             };
                         };
+
+                        const my_account = temp_friends.shift();
 
                         for (let i = 0; i < temp_friends.length; i++){
                             for (let j = 0; j < (temp_friends.length - i - 1); j++){
@@ -356,7 +375,7 @@ function Contacts() {
                             }
                         }
 
-                        temp_friends.unshift(account);
+                        temp_friends.unshift(my_account);
 
                         setFriendsInfo({'messages': temp_messages, 'friends': temp_friends});
                         setCurrentFriend(temp_friends[0]);
